@@ -19,7 +19,10 @@ export const fetchCartData = (dispatch) => {
 
         try {
             const cartData = await fetchData();
-            dispatch(cartActions.replaceCart(cartData));
+            dispatch(cartActions.replaceCart({
+                items: cartData.items || [],
+                totalQuantity: cartData.totalQuantity,
+            }));
         } catch (error) {
             dispatch(
                 uiActions.showNotification({
@@ -48,7 +51,10 @@ export const sendCartData = (cart) => {
             const response = await fetch(
                 "https://reduxadv-d3bca-default-rtdb.firebaseio.com/cart.json", {
                 method: "PUT", // PUT means replace existing cart data with data I sent
-                body: JSON.stringify(cart),
+                body: JSON.stringify({
+                    items: cart.items,
+                    totalQuantity: cart.totalQuantity,
+                }),
             });
 
             if (!response.ok) {
