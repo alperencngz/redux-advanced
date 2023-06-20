@@ -5,7 +5,7 @@ import Cart from './components/Cart/Cart';
 import Layout from './components/Layout/Layout';
 import Products from './components/Shop/Products';
 import Notification from './components/UI/Notification';
-import { sendCartData } from './store/cart-slice';
+import { sendCartData, fetchCartData } from './store/cart-actions';
 
 //This part is for fixing the initial render of cart that empties our cart data 
 
@@ -19,23 +19,25 @@ function App() {
   const notification = useSelector(state => state.ui.notification);
 
   useEffect(() => {
+    dispatch(fetchCartData());
+  }, [dispatch]);
 
-    if (isInitial){
+  useEffect(() => {
+    if (isInitial) {
       isInitial = false;
       return;
     }
 
     dispatch(sendCartData(cart));
-
   }, [cart, dispatch]);
 
   return (
     <>
       {notification && (
         <Notification
-          status = {notification.status}
-          title = {notification.title}
-          message = {notification.message}
+          status={notification.status}
+          title={notification.title}
+          message={notification.message}
         />
       )}
       <Layout>
